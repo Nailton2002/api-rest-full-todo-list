@@ -21,5 +21,4 @@ public class Todo implements Serializable {
      @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd't'HH:mm:ss'Z'", timezone = "GMT")
      private LocalDateTime dataTarefaFinalizada = LocalDateTime.now();
      private Boolean tarefaFinalizada = false;
-
 }

@@ -2,7 +2,9 @@ package com.api.todo.service;
 
 import com.api.todo.domain.Todo;
 import com.api.todo.dto.TodoListar;
+import com.api.todo.dto.TodoListarPorId;
 import com.api.todo.dto.TodoSalvarDto;
+import com.api.todo.infra.validation.ObjectNotFoundException;
 import com.api.todo.repository.TodoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -31,8 +33,14 @@ public class TodoService {
     public Page<Todo> findAllByTarefaFinalizadaFalse(Pageable paginacao){
         return repository.findAllByTarefaFinalizadaFalse(paginacao);
     }
+
      public Page<Todo> findAllByTarefaFinalizadaTrue(Pageable paginacao){
         return repository.findAllByTarefaFinalizadaTrue(paginacao);
+    }
+
+    public TodoListarPorId findByid(Long id){
+        Todo todo = repository.findById(id).orElseThrow(()-> new ObjectNotFoundException(id));
+        return new TodoListarPorId(todo);
     }
 
 }

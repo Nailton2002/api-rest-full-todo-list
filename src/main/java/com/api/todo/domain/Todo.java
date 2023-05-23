@@ -14,10 +14,10 @@ import java.time.LocalDateTime;
 @Table(name = "tb_todo")
 @Entity(name = "Todo")
 @EqualsAndHashCode(of = "id")
-public class Todo implements Serializable {
+public class Todo {
      @Id
      @GeneratedValue(strategy = GenerationType.IDENTITY)
-     private Integer id;
+     private Long id;
      private String titulo;
      private String descricao;
      @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd't'HH:mm:ss'Z'", timezone = "GMT")

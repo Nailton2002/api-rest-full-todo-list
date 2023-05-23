@@ -1,5 +1,6 @@
 package com.api.todo.resource;
 
+import com.api.todo.domain.Todo;
 import com.api.todo.dto.TodoListar;
 import com.api.todo.dto.TodoSalvarDto;
 import com.api.todo.service.TodoService;
@@ -21,9 +22,9 @@ public class TodoResource {
 
     @Transactional
     @PostMapping(value = "/todos")
-    public ResponseEntity<TodoSalvarDto> create(@RequestBody @Valid TodoSalvarDto dados, UriComponentsBuilder uriComponentsBuilder){
+    public ResponseEntity create(@RequestBody @Valid TodoSalvarDto dados, UriComponentsBuilder uriComponentsBuilder){
         service.create(dados);
-        URI uri = uriComponentsBuilder.path("/{id}").buildAndExpand(dados.id()).toUri();
+        var uri = uriComponentsBuilder.path("/{id}").buildAndExpand(dados.getClass()).toUri();
         return ResponseEntity.created(uri).body(dados);
     }
 

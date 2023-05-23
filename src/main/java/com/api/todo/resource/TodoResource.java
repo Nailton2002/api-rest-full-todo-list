@@ -1,16 +1,21 @@
 package com.api.todo.resource;
 
+import com.api.todo.domain.Todo;
+import com.api.todo.dto.TodoAtualizar;
 import com.api.todo.dto.TodoListar;
-import com.api.todo.dto.TodoSalvarDto;
+import com.api.todo.dto.TodoListarPorId;
+import com.api.todo.dto.TodoSalvar;
 import com.api.todo.service.TodoService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -21,9 +26,9 @@ public class TodoResource {
 
     @Transactional
     @PostMapping(value = "/todos")
-    public ResponseEntity<TodoSalvarDto> create(@RequestBody @Valid TodoSalvarDto dados, UriComponentsBuilder uriComponentsBuilder){
+    public ResponseEntity create(@RequestBody @Valid TodoSalvar dados, UriComponentsBuilder uriComponentsBuilder){
         service.create(dados);
-        URI uri = uriComponentsBuilder.path("/{id}").buildAndExpand(dados.id()).toUri();
+        var uri = uriComponentsBuilder.path("/{id}").buildAndExpand(dados.getClass()).toUri();
         return ResponseEntity.created(uri).body(dados);
     }
 
@@ -32,4 +37,45 @@ public class TodoResource {
         List<TodoListar> list = service.findAll();
         return ResponseEntity.ok().body(list);
     }
+
+    @GetMapping("/todos/pages/open")
+    public ResponseEntity<Page<TodoListar>> listarPorPaginacaoFechada(@PageableDefault(size = 5, sort = {"titulo"})Pageable paginacao){
+        var page = service.findAllByTarefaFinalizadaFalse(paginacao).map(TodoListar::new);
+        return ResponseEntity.ok(page);
+    }
+
+    @GetMapping("/todos/pages/close")
+    public ResponseEntity<Page<TodoListar>> listarPorPaginacaoAberta(@PageableDefault(size = 5, sort = {"titulo"})Pageable paginacao){
+        var page = service.findAllByTarefaFinalizadaTrue(paginacao).map(TodoListar::new);
+        return ResponseEntity.ok(page);
+    }
+
+    @GetMapping("/todos/{id}")
+    public ResponseEntity<TodoListarPorId> findById(@PathVariable Long id){
+        TodoListarPorId obj = service.findByid(id);
+        return ResponseEntity.ok().body(obj);
+    }
+
+    @Transactional
+    @PutMapping("/todos/{id}")
+    public ResponseEntity atualizar(@RequestBody TodoAtualizar dados){
+        var todo = service.update(dados.id());
+        todo.atualizarTarefas(dados);
+        return ResponseEntity.ok(new TodoListarPorId(todo));
+    }
+
+    @Transactional
+    @DeleteMapping("/todos/{id}")
+    public ResponseEntity delete(@PathVariable Long id){
+        service.delete(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @Transactional
+    @DeleteMapping("/todos/logicos/{id}")
+    public ResponseEntity finalizandoTarefa(@PathVariable Long id){
+        service.finalizandoTarefa(id);
+        return ResponseEntity.noContent().build();
+    }
+
 }

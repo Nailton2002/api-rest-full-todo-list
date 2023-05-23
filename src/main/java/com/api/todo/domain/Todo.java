@@ -42,4 +42,8 @@ public class Todo {
                this.dataTarefaFinalizada = dados.dataTarefaFinalizada();
           }
      }
+
+     public void finalizandoTarefa(){
+          this.tarefaFinalizada = true;
+     }
 }

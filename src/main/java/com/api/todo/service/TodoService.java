@@ -5,6 +5,8 @@ import com.api.todo.dto.TodoListar;
 import com.api.todo.dto.TodoSalvarDto;
 import com.api.todo.repository.TodoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,5 +26,9 @@ public class TodoService {
         List<Todo> list = repository.findAll();
         List<TodoListar> dto = list.stream().map(t -> new TodoListar(t)).collect(Collectors.toList());
         return dto;
+    }
+
+    public Page<Todo> findAllByTarefaFinalizadaFalse(Pageable paginacao){
+        return repository.findAllByTarefaFinalizadaFalse(paginacao);
     }
 }

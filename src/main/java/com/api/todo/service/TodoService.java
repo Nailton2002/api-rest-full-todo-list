@@ -7,6 +7,7 @@ import com.api.todo.dto.TodoSalvar;
 import com.api.todo.infra.validation.ObjectNotFoundException;
 import com.api.todo.infra.validation.ResourceNotFoundException;
 import com.api.todo.repository.TodoRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
@@ -55,26 +56,21 @@ public class TodoService {
         }
     }
 
-    public void delete (Long id){
-        try {
+    public void delete(Long id) {
+        if (repository.existsById(id) == true){
             repository.deleteById(id);
-        } catch (EmptyResultDataAccessException e){
+        } else {
             throw new ObjectNotFoundException(id);
         }
     }
 
     public void finalizandoTarefa(Long id){
         var todo = repository.getReferenceById(id);
-        if (referenciaPorId(id).getTarefaFinalizada() == false){
+        if (update(id).getTarefaFinalizada() == false){
             todo.finalizandoTarefa();
         } else {
             throw new ResourceNotFoundException(id);
         }
-    }
-
-    public Todo referenciaPorId(Long id) {
-        Optional<Todo> obj = Optional.of(repository.getReferenceById(id));
-        return obj.orElseThrow(() -> new ObjectNotFoundException("Objeto não encontrado" + Todo.class));
     }
 
 }

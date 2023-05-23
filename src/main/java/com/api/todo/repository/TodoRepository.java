@@ -11,6 +11,7 @@ import java.util.List;
 public interface TodoRepository extends JpaRepository<Todo, Long> {
 
     Page<Todo> findAllByTarefaFinalizadaFalse(Pageable paginacao);
+    Page<Todo> findAllByTarefaFinalizadaTrue(Pageable paginacao);
 
 
 }

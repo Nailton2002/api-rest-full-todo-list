@@ -31,4 +31,8 @@ public class TodoService {
     public Page<Todo> findAllByTarefaFinalizadaFalse(Pageable paginacao){
         return repository.findAllByTarefaFinalizadaFalse(paginacao);
     }
+     public Page<Todo> findAllByTarefaFinalizadaTrue(Pageable paginacao){
+        return repository.findAllByTarefaFinalizadaTrue(paginacao);
+    }
+
 }

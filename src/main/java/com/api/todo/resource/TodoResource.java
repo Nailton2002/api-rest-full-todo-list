@@ -37,9 +37,15 @@ public class TodoResource {
         return ResponseEntity.ok().body(list);
     }
 
-    @GetMapping("/todos/pages")
-    public ResponseEntity<Page<TodoListar>> listarPorPaginacao(@PageableDefault(size = 5, sort = {"titulo"})Pageable paginacao){
+    @GetMapping("/todos/pages/close")
+    public ResponseEntity<Page<TodoListar>> listarPorPaginacaoFechada(@PageableDefault(size = 5, sort = {"titulo"})Pageable paginacao){
         var page = service.findAllByTarefaFinalizadaFalse(paginacao).map(TodoListar::new);
         return ResponseEntity.ok(page);
     }
+     @GetMapping("/todos/pages/open")
+    public ResponseEntity<Page<TodoListar>> listarPorPaginacaoAberta(@PageableDefault(size = 5, sort = {"titulo"})Pageable paginacao){
+        var page = service.findAllByTarefaFinalizadaTrue(paginacao).map(TodoListar::new);
+        return ResponseEntity.ok(page);
+    }
+
 }

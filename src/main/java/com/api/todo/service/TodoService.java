@@ -8,6 +8,7 @@ import com.api.todo.infra.validation.ObjectNotFoundException;
 import com.api.todo.infra.validation.ResourceNotFoundException;
 import com.api.todo.repository.TodoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -50,6 +51,14 @@ public class TodoService {
             Optional<Todo> obj = Optional.of(repository.getReferenceById(id));
             return obj.orElseThrow(()-> new ObjectNotFoundException(id));
         } else {
+            throw new ObjectNotFoundException(id);
+        }
+    }
+
+    public void delete (Long id){
+        try {
+            repository.deleteById(id);
+        } catch (EmptyResultDataAccessException e){
             throw new ObjectNotFoundException(id);
         }
     }

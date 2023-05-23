@@ -2,6 +2,7 @@ package com.api.todo.resource;
 
 import com.api.todo.domain.Todo;
 import com.api.todo.dto.TodoListar;
+import com.api.todo.dto.TodoListarPorId;
 import com.api.todo.dto.TodoSalvarDto;
 import com.api.todo.service.TodoService;
 import jakarta.validation.Valid;
@@ -42,10 +43,17 @@ public class TodoResource {
         var page = service.findAllByTarefaFinalizadaFalse(paginacao).map(TodoListar::new);
         return ResponseEntity.ok(page);
     }
+
      @GetMapping("/todos/pages/open")
     public ResponseEntity<Page<TodoListar>> listarPorPaginacaoAberta(@PageableDefault(size = 5, sort = {"titulo"})Pageable paginacao){
         var page = service.findAllByTarefaFinalizadaTrue(paginacao).map(TodoListar::new);
         return ResponseEntity.ok(page);
+    }
+
+    @GetMapping("/todos/{id}")
+    public ResponseEntity<TodoListarPorId> findById(@PathVariable Long id){
+        TodoListarPorId obj = service.findByid(id);
+        return ResponseEntity.ok().body(obj);
     }
 
 }

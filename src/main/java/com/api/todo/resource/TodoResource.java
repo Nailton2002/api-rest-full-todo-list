@@ -38,14 +38,28 @@ public class TodoResource {
         return ResponseEntity.ok().body(list);
     }
 
-    @GetMapping("/todos/pages/open")
-    public ResponseEntity<Page<TodoListar>> listarPorPaginacaoFechada(@PageableDefault(size = 5, sort = {"titulo"})Pageable paginacao){
+    @GetMapping(value = "/todos/false/iniciadas")
+    public ResponseEntity<List<TodoListarPorId>> listOpen() {
+        List<TodoListarPorId> list = service.findAllOpen();
+        return ResponseEntity.ok().body(list);
+    }
+
+    @GetMapping(value = "/todos/true/finalizadas")
+    public ResponseEntity<List<TodoListarPorId>> listClose() {
+        List<TodoListarPorId> list = service.findAllClose();
+        return ResponseEntity.ok().body(list);
+    }
+
+    @GetMapping("/todos/pages/opens")
+    public ResponseEntity<Page<TodoListar>> listarPorPaginacaoFechada(@PageableDefault(size = 5,
+    sort = {"titulo"}) Pageable paginacao){
         var page = service.findAllByTarefaFinalizadaFalse(paginacao).map(TodoListar::new);
         return ResponseEntity.ok(page);
     }
 
-    @GetMapping("/todos/pages/close")
-    public ResponseEntity<Page<TodoListar>> listarPorPaginacaoAberta(@PageableDefault(size = 5, sort = {"titulo"})Pageable paginacao){
+    @GetMapping("/todos/pages/closes")
+    public ResponseEntity<Page<TodoListar>> listarPorPaginacaoAberta(@PageableDefault(size = 5,
+     sort = {"titulo"}) Pageable paginacao){
         var page = service.findAllByTarefaFinalizadaTrue(paginacao).map(TodoListar::new);
         return ResponseEntity.ok(page);
     }
@@ -72,7 +86,7 @@ public class TodoResource {
     }
 
     @Transactional
-    @DeleteMapping("/todos/logicos/{id}")
+    @DeleteMapping("/todos/finalizadas/{id}")
     public ResponseEntity finalizandoTarefa(@PathVariable Long id){
         service.finalizandoTarefa(id);
         return ResponseEntity.noContent().build();

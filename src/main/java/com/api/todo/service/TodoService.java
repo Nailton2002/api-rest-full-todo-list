@@ -5,6 +5,7 @@ import com.api.todo.dto.TodoListar;
 import com.api.todo.dto.TodoListarPorId;
 import com.api.todo.dto.TodoSalvar;
 import com.api.todo.infra.validation.ObjectNotFoundException;
+import com.api.todo.infra.validation.ResourceNotFoundException;
 import com.api.todo.repository.TodoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -40,7 +41,7 @@ public class TodoService {
     }
 
     public TodoListarPorId findByid(Long id){
-        Todo todo = repository.findById(id).orElseThrow(()-> new ObjectNotFoundException(id));
+        var todo = repository.findById(id).orElseThrow(()-> new ObjectNotFoundException(id));
         return new TodoListarPorId(todo);
     }
 
@@ -51,6 +52,20 @@ public class TodoService {
         } else {
             throw new ObjectNotFoundException(id);
         }
+    }
+
+    public void finalizandoTarefa(Long id){
+        var todo = repository.getReferenceById(id);
+        if (referenciaPorId(id).getTarefaFinalizada() == false){
+            todo.finalizandoTarefa();
+        } else {
+            throw new ResourceNotFoundException(id);
+        }
+    }
+
+    public Todo referenciaPorId(Long id) {
+        Optional<Todo> obj = Optional.of(repository.getReferenceById(id));
+        return obj.orElseThrow(() -> new ObjectNotFoundException("Objeto não encontrado" + Todo.class));
     }
 
 }

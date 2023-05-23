@@ -65,6 +65,13 @@ public class TodoResource {
     }
 
     @Transactional
+    @DeleteMapping("/todos/{id}")
+    public ResponseEntity delete(@PathVariable Long id){
+        service.delete(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @Transactional
     @DeleteMapping("/todos/logicos/{id}")
     public ResponseEntity finalizandoTarefa(@PathVariable Long id){
         service.finalizandoTarefa(id);

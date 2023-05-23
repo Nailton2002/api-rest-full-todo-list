@@ -6,6 +6,9 @@ import com.api.todo.dto.TodoSalvarDto;
 import com.api.todo.service.TodoService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -32,5 +35,11 @@ public class TodoResource {
     public ResponseEntity<List<TodoListar>> listar(){
         List<TodoListar> list = service.findAll();
         return ResponseEntity.ok().body(list);
+    }
+
+    @GetMapping("/todos/pages")
+    public ResponseEntity<Page<TodoListar>> listarPorPaginacao(@PageableDefault(size = 5, sort = {"titulo"})Pageable paginacao){
+        var page = service.findAllByTarefaFinalizadaFalse(paginacao).map(TodoListar::new);
+        return ResponseEntity.ok(page);
     }
 }

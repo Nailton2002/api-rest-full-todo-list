@@ -17,8 +17,8 @@ public class StandardError{
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd't'HH:mm:ss'Z'", timezone = "GMT")
 	private Instant timestamp;
 	private Integer status;
-	private String message;
 	private String error;
+	private String message;
 	private String path;
 
 }

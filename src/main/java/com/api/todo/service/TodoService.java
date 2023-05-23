@@ -3,7 +3,7 @@ package com.api.todo.service;
 import com.api.todo.domain.Todo;
 import com.api.todo.dto.TodoListar;
 import com.api.todo.dto.TodoListarPorId;
-import com.api.todo.dto.TodoSalvarDto;
+import com.api.todo.dto.TodoSalvar;
 import com.api.todo.infra.validation.ObjectNotFoundException;
 import com.api.todo.repository.TodoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -20,7 +21,7 @@ public class TodoService {
     @Autowired
     private TodoRepository repository;
 
-    public Todo create(TodoSalvarDto dados){
+    public Todo create(TodoSalvar dados){
         return repository.save(new Todo(dados));
     }
 
@@ -41,6 +42,15 @@ public class TodoService {
     public TodoListarPorId findByid(Long id){
         Todo todo = repository.findById(id).orElseThrow(()-> new ObjectNotFoundException(id));
         return new TodoListarPorId(todo);
+    }
+
+    public Todo update(Long id){
+        if (repository.existsById(id) == true){
+            Optional<Todo> obj = Optional.of(repository.getReferenceById(id));
+            return obj.orElseThrow(()-> new ObjectNotFoundException(id));
+        } else {
+            throw new ObjectNotFoundException(id);
+        }
     }
 
 }

@@ -34,6 +34,18 @@ public class TodoService {
         return dto;
     }
 
+    public List<TodoListarPorId> findAllOpen() {
+        List<Todo> list = repository.findAllOpen();
+        List<TodoListarPorId> dto = list.stream().map(t -> new TodoListarPorId(t)).collect(Collectors.toList());
+        return dto;
+    }
+
+    public List<TodoListarPorId> findAllClose() {
+        List<Todo> list = repository.findAllClose();
+        List<TodoListarPorId> dto = list.stream().map(t -> new TodoListarPorId(t)).collect(Collectors.toList());
+        return dto;
+    }
+
     public Page<Todo> findAllByTarefaFinalizadaFalse(Pageable paginacao){
         return repository.findAllByTarefaFinalizadaFalse(paginacao);
     }

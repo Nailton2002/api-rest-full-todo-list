@@ -64,4 +64,11 @@ public class TodoResource {
         return ResponseEntity.ok(new TodoListarPorId(todo));
     }
 
+    @Transactional
+    @DeleteMapping("/todos/logicos/{id}")
+    public ResponseEntity finalizandoTarefa(@PathVariable Long id){
+        service.finalizandoTarefa(id);
+        return ResponseEntity.noContent().build();
+    }
+
 }

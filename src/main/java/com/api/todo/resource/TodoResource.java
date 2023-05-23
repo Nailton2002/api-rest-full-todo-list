@@ -1,18 +1,17 @@
 package com.api.todo.resource;
 
+import com.api.todo.dto.TodoListar;
 import com.api.todo.dto.TodoSalvarDto;
 import com.api.todo.service.TodoService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api")
@@ -28,4 +27,9 @@ public class TodoResource {
         return ResponseEntity.created(uri).body(dados);
     }
 
+    @GetMapping("/todos")
+    public ResponseEntity<List<TodoListar>> listar(){
+        List<TodoListar> list = service.findAll();
+        return ResponseEntity.ok().body(list);
+    }
 }

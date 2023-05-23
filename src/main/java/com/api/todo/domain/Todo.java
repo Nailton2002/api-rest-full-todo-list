@@ -1,6 +1,7 @@
 package com.api.todo.domain;
 
 import com.api.todo.dto.TodoAtualizar;
+import com.api.todo.dto.TodoListarPorId;
 import com.api.todo.dto.TodoSalvar;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;

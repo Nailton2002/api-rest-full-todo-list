@@ -1,15 +1,13 @@
-package com.api.todo.service;
+package com.api.todo.domain.todo.service;
 
-import com.api.todo.domain.Todo;
-import com.api.todo.dto.TodoListar;
-import com.api.todo.dto.TodoListarPorId;
-import com.api.todo.dto.TodoSalvar;
+import com.api.todo.domain.todo.entity.Todo;
+import com.api.todo.domain.todo.dto.TodoListar;
+import com.api.todo.domain.todo.dto.TodoListarPorId;
+import com.api.todo.domain.todo.dto.TodoSalvar;
 import com.api.todo.infra.validation.ObjectNotFoundException;
 import com.api.todo.infra.validation.ResourceNotFoundException;
-import com.api.todo.repository.TodoRepository;
-import jakarta.persistence.EntityNotFoundException;
+import com.api.todo.domain.todo.repository.TodoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;

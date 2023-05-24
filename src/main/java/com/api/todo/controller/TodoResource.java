@@ -1,11 +1,10 @@
-package com.api.todo.resource;
+package com.api.todo.controller;
 
-import com.api.todo.domain.Todo;
-import com.api.todo.dto.TodoAtualizar;
-import com.api.todo.dto.TodoListar;
-import com.api.todo.dto.TodoListarPorId;
-import com.api.todo.dto.TodoSalvar;
-import com.api.todo.service.TodoService;
+import com.api.todo.domain.todo.dto.TodoAtualizar;
+import com.api.todo.domain.todo.dto.TodoListar;
+import com.api.todo.domain.todo.dto.TodoListarPorId;
+import com.api.todo.domain.todo.dto.TodoSalvar;
+import com.api.todo.domain.todo.service.TodoService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

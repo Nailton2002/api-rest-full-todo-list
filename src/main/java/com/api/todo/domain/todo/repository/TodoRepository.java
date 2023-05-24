@@ -1,12 +1,11 @@
-package com.api.todo.repository;
+package com.api.todo.domain.todo.repository;
 
-import com.api.todo.domain.Todo;
+import com.api.todo.domain.todo.entity.Todo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 public interface TodoRepository extends JpaRepository<Todo, Long> {

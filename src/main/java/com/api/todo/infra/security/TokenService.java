@@ -23,10 +23,10 @@ public class TokenService {
         try {
             var algoritmo = Algorithm.HMAC256(secret);
             return JWT.create()
-                    .withIssuer("Api Rest Full com.api")
-                    .withSubject(usuario.getLogin())
-                    .withExpiresAt(dataExpiracao())
-                    .sign(algoritmo);
+                      .withIssuer("Api Rest Full")
+                      .withSubject(usuario.getLogin())
+                      .withExpiresAt(dataExpiracao())
+                      .sign(algoritmo);
         } catch (JWTCreationException exception){
             throw new RuntimeException("erro ao gerar token jwt", exception);
         }
@@ -36,10 +36,10 @@ public class TokenService {
         try {
             var algoritmo = Algorithm.HMAC256(secret);
             return JWT.require(algoritmo)
-                    .withIssuer("Api Rest Full com.api")
-                    .build()
-                    .verify(tokenJWT)
-                    .getSubject();
+                      .withIssuer("Api Rest Full")
+                      .build()
+                      .verify(tokenJWT)
+                      .getSubject();
         } catch (JWTVerificationException exception) {
             throw new RuntimeException("Token JWT inválido ou expirado!");
         }

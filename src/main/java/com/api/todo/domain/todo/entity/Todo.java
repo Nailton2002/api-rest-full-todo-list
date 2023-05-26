@@ -1,8 +1,7 @@
-package com.api.todo.domain;
+package com.api.todo.domain.todo.entity;
 
-import com.api.todo.dto.TodoAtualizar;
-import com.api.todo.dto.TodoListarPorId;
-import com.api.todo.dto.TodoSalvar;
+import com.api.todo.domain.todo.dto.TodoAtualizar;
+import com.api.todo.domain.todo.dto.TodoSalvar;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.*;

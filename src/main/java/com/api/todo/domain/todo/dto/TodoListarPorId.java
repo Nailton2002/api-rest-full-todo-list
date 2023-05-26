@@ -1,6 +1,6 @@
-package com.api.todo.dto;
+package com.api.todo.domain.todo.dto;
 
-import com.api.todo.domain.Todo;
+import com.api.todo.domain.todo.entity.Todo;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.time.LocalDateTime;

@@ -1,13 +1,14 @@
-package com.api.todo.resource;
+package com.api.todo.controller;
 
-import com.api.todo.domain.Todo;
-import com.api.todo.dto.TodoAtualizar;
-import com.api.todo.dto.TodoListar;
-import com.api.todo.dto.TodoListarPorId;
-import com.api.todo.dto.TodoSalvar;
-import com.api.todo.service.TodoService;
+import com.api.todo.domain.todo.dto.TodoAtualizar;
+import com.api.todo.domain.todo.dto.TodoListar;
+import com.api.todo.domain.todo.dto.TodoListarPorId;
+import com.api.todo.domain.todo.dto.TodoSalvar;
+import com.api.todo.domain.todo.service.TodoService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -19,7 +20,9 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.util.List;
 
 @RestController
+@Profile("dev")
 @RequestMapping("/api")
+@SecurityRequirement(name = "bearer-key")
 public class TodoResource {
     @Autowired
     private TodoService service;

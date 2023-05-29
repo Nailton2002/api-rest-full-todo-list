@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 
 @Service
+@Profile("prod")
 public class TokenService {
 
     @Value("${api.security.token.secret}")

@@ -21,60 +21,60 @@ import java.util.List;
 
 @RestController
 @Profile("dev")
-@RequestMapping("/api")
+@RequestMapping("/todos")
 @SecurityRequirement(name = "bearer-key")
 public class TodoResource {
     @Autowired
     private TodoService service;
 
     @Transactional
-    @PostMapping(value = "/todos")
+    @PostMapping
     public ResponseEntity create(@RequestBody @Valid TodoSalvar dados, UriComponentsBuilder uriComponentsBuilder){
-        service.create(dados);
-        var uri = uriComponentsBuilder.path("/{id}").buildAndExpand(dados.getClass()).toUri();
-        return ResponseEntity.created(uri).body(dados);
+        var obj =  service.create(dados);
+        var uri = uriComponentsBuilder.path("/todos/{id}").buildAndExpand(obj.getId()).toUri();
+        return ResponseEntity.created(uri).body(new TodoListarPorId(obj));
     }
 
-    @GetMapping("/todos")
+    @GetMapping
     public ResponseEntity<List<TodoListar>> listar(){
         List<TodoListar> list = service.findAll();
         return ResponseEntity.ok().body(list);
     }
 
-    @GetMapping(value = "/todos/false/iniciadas")
+    @GetMapping(value = "/false/iniciadas")
     public ResponseEntity<List<TodoListarPorId>> listOpen() {
         List<TodoListarPorId> list = service.findAllOpen();
         return ResponseEntity.ok().body(list);
     }
 
-    @GetMapping(value = "/todos/true/finalizadas")
+    @GetMapping(value = "/true/finalizadas")
     public ResponseEntity<List<TodoListarPorId>> listClose() {
         List<TodoListarPorId> list = service.findAllClose();
         return ResponseEntity.ok().body(list);
     }
 
-    @GetMapping("/todos/pages/opens")
+    @GetMapping("/pages/opens")
     public ResponseEntity<Page<TodoListar>> listarPorPaginacaoFechada(@PageableDefault(size = 5,
     sort = {"titulo"}) Pageable paginacao){
         var page = service.findAllByTarefaFinalizadaFalse(paginacao).map(TodoListar::new);
         return ResponseEntity.ok(page);
     }
 
-    @GetMapping("/todos/pages/closes")
+    @GetMapping("/pages/closes")
     public ResponseEntity<Page<TodoListar>> listarPorPaginacaoAberta(@PageableDefault(size = 5,
      sort = {"titulo"}) Pageable paginacao){
         var page = service.findAllByTarefaFinalizadaTrue(paginacao).map(TodoListar::new);
         return ResponseEntity.ok(page);
     }
 
-    @GetMapping("/todos/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<TodoListarPorId> findById(@PathVariable Long id){
         TodoListarPorId obj = service.findByid(id);
         return ResponseEntity.ok().body(obj);
     }
 
     @Transactional
-    @PutMapping("/todos/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity atualizar(@RequestBody TodoAtualizar dados){
         var todo = service.update(dados.id());
         todo.atualizarTarefas(dados);
@@ -82,14 +82,14 @@ public class TodoResource {
     }
 
     @Transactional
-    @DeleteMapping("/todos/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity delete(@PathVariable Long id){
         service.delete(id);
         return ResponseEntity.noContent().build();
     }
 
     @Transactional
-    @DeleteMapping("/todos/finalizadas/{id}")
+    @DeleteMapping("/finalizadas/{id}")
     public ResponseEntity finalizandoTarefa(@PathVariable Long id){
         service.finalizandoTarefa(id);
         return ResponseEntity.noContent().build();

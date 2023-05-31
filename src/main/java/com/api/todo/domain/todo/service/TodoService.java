@@ -23,7 +23,9 @@ public class TodoService {
     private TodoRepository repository;
 
     public Todo create(TodoSalvar dados){
-        return repository.save(new Todo(dados));
+        Todo obj = new Todo(dados);
+        obj = repository.save(new Todo(dados));
+        return obj;
     }
 
     public List<TodoListar> findAll(){

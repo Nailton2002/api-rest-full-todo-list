@@ -1,4 +1,4 @@
-package com.api.todo.controller;
+package com.api.todo.application;
 
 import com.api.todo.domain.todo.dto.TodoAtualizar;
 import com.api.todo.domain.todo.dto.TodoListar;

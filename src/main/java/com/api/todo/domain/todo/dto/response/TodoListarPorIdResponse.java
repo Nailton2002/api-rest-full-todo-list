@@ -1,11 +1,11 @@
-package com.api.todo.domain.todo.dto;
+package com.api.todo.domain.todo.dto.response;
 
 import com.api.todo.domain.todo.entity.Todo;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.time.LocalDateTime;
 
-public record TodoListarPorId (
+public record TodoListarPorIdResponse(
         Long id,
         String titulo,
         String descricao,
@@ -13,7 +13,7 @@ public record TodoListarPorId (
         LocalDateTime dataTarefaFinalizada,
         Boolean tarefaFinalizada){
 
-    public TodoListarPorId(Todo todo){
+    public TodoListarPorIdResponse(Todo todo){
         this(todo.getId(),
              todo.getTitulo(),
              todo.getDescricao(),

@@ -1,9 +1,9 @@
 package com.api.todo.domain.todo.service;
 
 import com.api.todo.domain.todo.entity.Todo;
-import com.api.todo.domain.todo.dto.TodoListar;
-import com.api.todo.domain.todo.dto.TodoListarPorId;
-import com.api.todo.domain.todo.dto.TodoSalvar;
+import com.api.todo.domain.todo.dto.response.TodoListarResponse;
+import com.api.todo.domain.todo.dto.response.TodoListarPorIdResponse;
+import com.api.todo.domain.todo.dto.request.TodoSalvarRequest;
 import com.api.todo.infra.validation.ObjectNotFoundException;
 import com.api.todo.infra.validation.ResourceNotFoundException;
 import com.api.todo.domain.todo.repository.TodoRepository;
@@ -22,27 +22,27 @@ public class TodoService {
     @Autowired
     private TodoRepository repository;
 
-    public Todo create(TodoSalvar dados){
+    public Todo create(TodoSalvarRequest dados){
         Todo obj = new Todo(dados);
         obj = repository.save(new Todo(dados));
         return obj;
     }
 
-    public List<TodoListar> findAll(){
+    public List<TodoListarResponse> findAll(){
         List<Todo> list = repository.findAll();
-        List<TodoListar> dto = list.stream().map(t -> new TodoListar(t)).collect(Collectors.toList());
+        List<TodoListarResponse> dto = list.stream().map(t -> new TodoListarResponse(t)).collect(Collectors.toList());
         return dto;
     }
 
-    public List<TodoListarPorId> findAllOpen() {
+    public List<TodoListarPorIdResponse> findAllOpen() {
         List<Todo> list = repository.findAllOpen();
-        List<TodoListarPorId> dto = list.stream().map(t -> new TodoListarPorId(t)).collect(Collectors.toList());
+        List<TodoListarPorIdResponse> dto = list.stream().map(t -> new TodoListarPorIdResponse(t)).collect(Collectors.toList());
         return dto;
     }
 
-    public List<TodoListarPorId> findAllClose() {
+    public List<TodoListarPorIdResponse> findAllClose() {
         List<Todo> list = repository.findAllClose();
-        List<TodoListarPorId> dto = list.stream().map(t -> new TodoListarPorId(t)).collect(Collectors.toList());
+        List<TodoListarPorIdResponse> dto = list.stream().map(t -> new TodoListarPorIdResponse(t)).collect(Collectors.toList());
         return dto;
     }
 
@@ -54,9 +54,9 @@ public class TodoService {
         return repository.findAllByTarefaFinalizadaTrue(paginacao);
     }
 
-    public TodoListarPorId findByid(Long id){
+    public TodoListarPorIdResponse findByid(Long id){
         var todo = repository.findById(id).orElseThrow(()-> new ObjectNotFoundException(id));
-        return new TodoListarPorId(todo);
+        return new TodoListarPorIdResponse(todo);
     }
 
     public Todo update(Long id){

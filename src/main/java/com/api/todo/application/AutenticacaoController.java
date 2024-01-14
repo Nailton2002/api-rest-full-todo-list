@@ -28,7 +28,7 @@ public class AutenticacaoController {
 
     @PostMapping
     public ResponseEntity efetuarLogin(@RequestBody @Valid DadosAutenticacao dados){
-        var token =new UsernamePasswordAuthenticationToken(dados.login(), dados.senha());
+        var token = new UsernamePasswordAuthenticationToken(dados.login(), dados.senha());
         var authentication = manager.authenticate(token);
         var tokenJWT = tokenService.gerarToken((Usuario) authentication.getPrincipal());
         return ResponseEntity.ok(new DadosTokenJWT(tokenJWT));

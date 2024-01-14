@@ -76,7 +76,7 @@ public class TodoResource {
     @Transactional
     @PutMapping("/{id}")
     public ResponseEntity atualizar(@RequestBody TodoAtualizar dados){
-        var todo = service.update(dados.id());
+        var todo = service.updateTaskById(dados.id());
         todo.atualizarTarefas(dados);
         return ResponseEntity.ok(new TodoListarPorId(todo));
     }

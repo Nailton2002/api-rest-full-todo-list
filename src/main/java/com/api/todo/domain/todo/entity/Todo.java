@@ -5,6 +5,7 @@ import com.api.todo.domain.todo.dto.TodoSalvar;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 
 import java.time.LocalDateTime;
 

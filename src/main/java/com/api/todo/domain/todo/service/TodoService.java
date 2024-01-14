@@ -59,7 +59,7 @@ public class TodoService {
         return new TodoListarPorId(todo);
     }
 
-    public Todo update(Long id){
+    public Todo updateTaskById(Long id){
         if (repository.existsById(id) == true){
             Optional<Todo> obj = Optional.of(repository.getReferenceById(id));
             return obj.orElseThrow(()-> new ObjectNotFoundException(id));
@@ -78,7 +78,7 @@ public class TodoService {
 
     public void finalizandoTarefa(Long id){
         var todo = repository.getReferenceById(id);
-        if (update(id).getTarefaFinalizada() == false){
+        if (updateTaskById(id).getTarefaFinalizada() == false){
             todo.finalizandoTarefa();
         } else {
             throw new ResourceNotFoundException(id);

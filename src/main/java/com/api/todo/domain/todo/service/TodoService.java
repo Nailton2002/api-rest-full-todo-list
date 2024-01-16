@@ -1,84 +1,98 @@
 package com.api.todo.domain.todo.service;
 
 import com.api.todo.domain.todo.entity.Todo;
-import com.api.todo.domain.todo.dto.TodoListar;
-import com.api.todo.domain.todo.dto.TodoListarPorId;
-import com.api.todo.domain.todo.dto.TodoSalvar;
+import com.api.todo.domain.todo.dto.response.TodoListarResponse;
+import com.api.todo.domain.todo.dto.response.TodoListarPorIdResponse;
+import com.api.todo.domain.todo.dto.request.TodoSalvarRequest;
+import com.api.todo.infra.validation.ObjectBadRequestException;
 import com.api.todo.infra.validation.ObjectNotFoundException;
 import com.api.todo.infra.validation.ResourceNotFoundException;
 import com.api.todo.domain.todo.repository.TodoRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class TodoService {
 
-    @Autowired
-    private TodoRepository repository;
+    private final TodoRepository repository;
 
-    public Todo create(TodoSalvar dados){
-        Todo obj = new Todo(dados);
-        obj = repository.save(new Todo(dados));
-        return obj;
+    public Todo create(TodoSalvarRequest dados) {
+        try {
+            Todo obj = new Todo(dados);
+            obj = repository.save(new Todo(dados));
+            return obj;
+        } catch (Exception e) {
+            throw new ObjectBadRequestException("Erro ao cria tarefa: " + e);
+        }
     }
 
-    public List<TodoListar> findAll(){
+    @Transactional
+    public List<TodoListarResponse> findAll() {
         List<Todo> list = repository.findAll();
-        List<TodoListar> dto = list.stream().map(t -> new TodoListar(t)).collect(Collectors.toList());
+        List<TodoListarResponse> dto = list.stream().map(t -> new TodoListarResponse(t)).collect(Collectors.toList());
         return dto;
     }
 
-    public List<TodoListarPorId> findAllOpen() {
+    @Transactional
+    public List<TodoListarPorIdResponse> findAllOpen() {
         List<Todo> list = repository.findAllOpen();
-        List<TodoListarPorId> dto = list.stream().map(t -> new TodoListarPorId(t)).collect(Collectors.toList());
+        List<TodoListarPorIdResponse> dto = list.stream().map(t -> new TodoListarPorIdResponse(t)).collect(Collectors.toList());
         return dto;
     }
 
-    public List<TodoListarPorId> findAllClose() {
+    @Transactional
+    public List<TodoListarPorIdResponse> findAllClose() {
         List<Todo> list = repository.findAllClose();
-        List<TodoListarPorId> dto = list.stream().map(t -> new TodoListarPorId(t)).collect(Collectors.toList());
+        List<TodoListarPorIdResponse> dto = list.stream().map(t -> new TodoListarPorIdResponse(t)).collect(Collectors.toList());
         return dto;
     }
 
-    public Page<Todo> findAllByTarefaFinalizadaFalse(Pageable paginacao){
+    @Transactional
+    public Page<Todo> findAllByTarefaFinalizadaFalse(Pageable paginacao) {
         return repository.findAllByTarefaFinalizadaFalse(paginacao);
     }
 
-     public Page<Todo> findAllByTarefaFinalizadaTrue(Pageable paginacao){
+    @Transactional
+    public Page<Todo> findAllByTarefaFinalizadaTrue(Pageable paginacao) {
         return repository.findAllByTarefaFinalizadaTrue(paginacao);
     }
 
-    public TodoListarPorId findByid(Long id){
-        var todo = repository.findById(id).orElseThrow(()-> new ObjectNotFoundException(id));
-        return new TodoListarPorId(todo);
+    @Transactional
+    public TodoListarPorIdResponse findByid(Long id) {
+        var todo = repository.findById(id).orElseThrow(() -> new ObjectNotFoundException(id));
+        return new TodoListarPorIdResponse(todo);
     }
 
-    public Todo updateTaskById(Long id){
-        if (repository.existsById(id) == true){
+    @Transactional
+    public Todo updateTaskById(Long id) {
+        if (repository.existsById(id) == true) {
             Optional<Todo> obj = Optional.of(repository.getReferenceById(id));
-            return obj.orElseThrow(()-> new ObjectNotFoundException(id));
+            return obj.orElseThrow(() -> new ObjectNotFoundException(id));
         } else {
             throw new ObjectNotFoundException(id);
         }
     }
 
     public void delete(Long id) {
-        if (repository.existsById(id) == true){
+        if (repository.existsById(id) == true) {
             repository.deleteById(id);
         } else {
             throw new ObjectNotFoundException(id);
         }
     }
 
-    public void finalizandoTarefa(Long id){
+    public void finalizandoTarefa(Long id) {
         var todo = repository.getReferenceById(id);
-        if (updateTaskById(id).getTarefaFinalizada() == false){
+        if (updateTaskById(id).getTarefaFinalizada() == false) {
             todo.finalizandoTarefa();
         } else {
             throw new ResourceNotFoundException(id);

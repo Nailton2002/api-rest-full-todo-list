@@ -1,6 +1,5 @@
 package com.api.todo.domain.todo.repository;
 
-import com.api.todo.domain.todo.dto.TodoSalvar;
 import com.api.todo.domain.todo.entity.Todo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

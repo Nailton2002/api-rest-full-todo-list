@@ -9,6 +9,7 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 
 import java.time.LocalDateTime;
 
+@Builder
 @Getter @Setter
 @NoArgsConstructor
 @AllArgsConstructor

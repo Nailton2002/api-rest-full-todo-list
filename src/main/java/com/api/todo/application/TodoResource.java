@@ -1,5 +1,6 @@
 package com.api.todo.application;
 
+import com.api.todo.application.doc.TodoResourceDoc;
 import com.api.todo.domain.todo.dto.request.TodoRequest;
 import com.api.todo.domain.todo.dto.response.TodoResponse;
 import com.api.todo.domain.todo.service.TodoService;
@@ -19,33 +20,9 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/todos")
 @SecurityRequirement(name = "bearer-key")
-public class TodoResource {
+public class TodoResource implements TodoResourceDoc {
 
     private final TodoService service;
-
-    @GetMapping(value = "/{id}")
-    public ResponseEntity<TodoResponse> findById(@PathVariable Long id) {
-        TodoResponse dto = service.findById(id);
-        return ResponseEntity.ok().body(dto);
-    }
-
-    @GetMapping(value = "/open")
-    public ResponseEntity<List<TodoResponse>> listOpen() {
-        List<TodoResponse> list = service.findAllOpen();
-        return ResponseEntity.ok().body(list);
-    }
-
-    @GetMapping(value = "/close")
-    public ResponseEntity<List<TodoResponse>> listClose() {
-        List<TodoResponse> list = service.findAllClose();
-        return ResponseEntity.ok().body(list);
-    }
-
-    @GetMapping
-    public ResponseEntity<List<TodoResponse>> listAll() {
-        List<TodoResponse> list = service.findAll();
-        return ResponseEntity.ok().body(list);
-    }
 
     @PostMapping
     public ResponseEntity<TodoResponse> create(@RequestBody TodoRequest request) {
@@ -54,23 +31,47 @@ public class TodoResource {
         return ResponseEntity.created(uri).build();
     }
 
+    @GetMapping
+    public ResponseEntity<List<TodoResponse>> findAll() {
+        List<TodoResponse> list = service.findAll();
+        return ResponseEntity.ok().body(list);
+    }
+
+    @GetMapping(value = "/open")
+    public ResponseEntity<List<TodoResponse>> findAllOpen() {
+        List<TodoResponse> list = service.findAllOpen();
+        return ResponseEntity.ok().body(list);
+    }
+
+    @GetMapping(value = "/close")
+    public ResponseEntity<List<TodoResponse>> findAllClose() {
+        List<TodoResponse> list = service.findAllClose();
+        return ResponseEntity.ok().body(list);
+    }
+
+    @GetMapping(value = "/{id}")
+    public ResponseEntity<TodoResponse> findById(@PathVariable Long id) {
+        TodoResponse dto = service.findById(id);
+        return ResponseEntity.ok().body(dto);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<TodoResponse> update(@PathVariable Long id, @RequestBody TodoRequest request) {
+        request.setId(id);
+        TodoResponse usuarioAtualizado = service.update(request);
+        return ResponseEntity.ok(usuarioAtualizado);
+    }
+
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         service.delete(id);
         return ResponseEntity.noContent().build();
     }
 
-    @PutMapping(value = "/{id}")
-    public ResponseEntity<TodoResponse> update(@PathVariable Long id, @RequestBody TodoRequest dto) {
-        TodoResponse newObj = service.update(id, dto);
-        return ResponseEntity.ok().body(newObj);
+    @DeleteMapping("/exclusionLogic/{id}")
+    public ResponseEntity<Void> exclusionLogic(@PathVariable Long id) {
+        service.exclusionLogic(id);
+        return ResponseEntity.noContent().build();
     }
-
-//	@PutMapping("/{id}")
-//	public ResponseEntity<TodoResponse> update(@PathVariable Integer id, @RequestBody TodoRequest request) {
-//		request.setId(id);
-//		TodoResponse usuarioAtualizado = service.update(request);
-//		return ResponseEntity.ok(usuarioAtualizado);
-//	}
 
 }

@@ -1,13 +1,11 @@
 package com.api.todo.domain.todo.entity;
 
-import com.api.todo.domain.todo.dto.request.TodoAtualizarRequest;
-import com.api.todo.domain.todo.dto.request.TodoSalvarRequest;
-import com.fasterxml.jackson.annotation.JsonFormat;
+import com.api.todo.domain.todo.dto.request.TodoRequest;
+import com.api.todo.domain.todo.dto.response.TodoResponse;
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.boot.autoconfigure.domain.EntityScan;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 
 @Builder
 @Getter @Setter
@@ -22,30 +20,44 @@ public class Todo {
      private Long id;
      private String titulo;
      private String descricao;
-     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd't'HH:mm:ss'Z'", timezone = "GMT")
-     private LocalDateTime dataTarefaFinalizada = LocalDateTime.now();
-     private Boolean tarefaFinalizada;
+     private Date dataParaFinalizar;
+     private Boolean finalizado = false;
 
-     public Todo (TodoSalvarRequest dados){
-          this.tarefaFinalizada = false;
-          this.titulo = dados.titulo();
-          this.descricao = dados.descricao();
-          this.dataTarefaFinalizada = dados.dataTarefaFinalizada();
+     public static Todo fromRequestToEntity(TodoRequest dto) {
+          return Todo.builder()
+                  .id(dto.getId())
+                  .titulo(dto.getTitulo())
+                  .descricao(dto.getDescricao())
+                  .dataParaFinalizar(dto.getDataParaFinalizar())
+                  .finalizado(dto.getFinalizado())
+                  .build();
      }
 
-     public void atualizarTarefas(TodoAtualizarRequest dados){
-          if (dados.titulo() != null){
-               this.titulo = dados.titulo();
+     public static Todo fromResponseToEntity(TodoResponse dto) {
+          return Todo.builder()
+                  .id(dto.getId())
+                  .titulo(dto.getTitulo())
+                  .descricao(dto.getDescricao())
+                  .dataParaFinalizar(dto.getDataParaFinalizar())
+                  .finalizado(dto.getFinalizado())
+                  .build();
+     }
+     public void atualizarTarefas(TodoRequest request) {
+          if (request.getTitulo() != null) {
+               this.titulo = request.getTitulo();
           }
-          if (dados.descricao() != null){
-               this.descricao = dados.descricao();
+          if (request.getDescricao() != null) {
+               this.descricao = request.getDescricao();
           }
-          if (dados.dataTarefaFinalizada() != null){
-               this.dataTarefaFinalizada = dados.dataTarefaFinalizada();
+          if (request.getDataParaFinalizar() != null) {
+               this.dataParaFinalizar = request.getDataParaFinalizar();
+          }
+          if (request.getFinalizado() != null) {
+               this.finalizado = request.getFinalizado();
           }
      }
 
      public void finalizandoTarefa(){
-          this.tarefaFinalizada = true;
+          this.finalizado = true;
      }
 }

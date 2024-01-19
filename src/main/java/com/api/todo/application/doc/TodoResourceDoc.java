@@ -1,9 +1,7 @@
 package com.api.todo.application.doc;
 
-import com.api.todo.domain.todo.dto.request.TodoAtualizarRequest;
-import com.api.todo.domain.todo.dto.request.TodoSalvarRequest;
-import com.api.todo.domain.todo.dto.response.TodoListarPorIdResponse;
-import com.api.todo.domain.todo.dto.response.TodoListarResponse;
+import com.api.todo.domain.todo.dto.request.TodoRequest;
+import com.api.todo.domain.todo.dto.response.TodoResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -25,55 +23,46 @@ public interface TodoResourceDoc {
             @ApiResponse(responseCode = "201", description = "Produto salvo com sucesso"),
             @ApiResponse(responseCode = "400", description = "Erro ao salvar os produtos"),
     })
-    ResponseEntity create(@RequestBody @Valid TodoSalvarRequest dados, UriComponentsBuilder uriComponentsBuilder);
+    ResponseEntity create(@RequestBody @Valid TodoRequest request);
+
 
     @Operation(summary = "Busca uma lista de todoas as tarefas que foram feitas.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Retorna uma lista de tarefas feitas.")
     })
-    ResponseEntity<List<TodoListarResponse>> listar();
+    ResponseEntity<List<TodoResponse>> findAll();
+
 
     @Operation(summary = "Busca uma lista de tarefas que não foi feita")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Retorna uma tarefas por id."),
             @ApiResponse(responseCode = "404", description = "Not Found")
     })
-    ResponseEntity<List<TodoListarPorIdResponse>> listOpen();
+    ResponseEntity<List<TodoResponse>> findAllOpen();
+
 
     @Operation(summary = "Busca uma lista de tarefas que foi feita")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Retorna uma tarefas por id."),
             @ApiResponse(responseCode = "404", description = "Not Found")
     })
-    ResponseEntity<List<TodoListarPorIdResponse>> listClose();
+    ResponseEntity<List<TodoResponse>> findAllClose();
 
-    @Operation(summary = "Busca uma lista de tarefas paginas que foi feita")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Retorna uma tarefas por id."),
-            @ApiResponse(responseCode = "404", description = "Not Found")
-    })
-    ResponseEntity<Page<TodoListarResponse>> listarPorPaginacaoFechada(@PageableDefault(size = 5, sort = {"titulo"}) Pageable paginacao);
-
-    @Operation(summary = "Busca uma lista de tarefas paginas que não foi feita")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Retorna uma tarefas por id."),
-            @ApiResponse(responseCode = "404", description = "Not Found")
-    })
-    ResponseEntity<Page<TodoListarResponse>> listarPorPaginacaoAberta(@PageableDefault(size = 5, sort = {"titulo"}) Pageable paginacao);
 
     @Operation(summary = "Busca uma tarefas que foi feita")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Retorna uma tarefas por id."),
             @ApiResponse(responseCode = "404", description = "Not Found")
     })
-    ResponseEntity<TodoListarPorIdResponse> findById(@PathVariable Long id);
+    ResponseEntity<TodoResponse> findById(@PathVariable Long id);
+
 
     @Operation(summary = "Atualiza uma tarefas que foi feita")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Retorna uma tarefas por id."),
             @ApiResponse(responseCode = "404", description = "Not Found")
     })
-    ResponseEntity atualizar(@RequestBody TodoAtualizarRequest dados);
+    ResponseEntity<TodoResponse> update(@PathVariable Long id, @RequestBody TodoRequest request);
 
     @Operation(summary = "Deleta uma tarefas que foi feita por id")
     @ApiResponses(value = {
@@ -87,5 +76,21 @@ public interface TodoResourceDoc {
             @ApiResponse(responseCode = "204", description = ""),
             @ApiResponse(responseCode = "404", description = "Not Found")
     })
-    ResponseEntity finalizandoTarefa(@PathVariable Long id);
+    ResponseEntity<Void> exclusionLogic(@PathVariable Long id);
+
+
+    //    @Operation(summary = "Busca uma lista de tarefas paginas que foi feita")
+//    @ApiResponses(value = {
+//            @ApiResponse(responseCode = "200", description = "Retorna uma tarefas por id."),
+//            @ApiResponse(responseCode = "404", description = "Not Found")
+//    })
+//    ResponseEntity<Page<TodoResponse>> listarPorPaginacaoFechada(@PageableDefault(size = 5, sort = {"titulo"}) Pageable paginacao);
+//
+//    @Operation(summary = "Busca uma lista de tarefas paginas que não foi feita")
+//    @ApiResponses(value = {
+//            @ApiResponse(responseCode = "200", description = "Retorna uma tarefas por id."),
+//            @ApiResponse(responseCode = "404", description = "Not Found")
+//    })
+//    ResponseEntity<Page<TodoResponse>> listarPorPaginacaoAberta(@PageableDefault(size = 5, sort = {"titulo"}) Pageable paginacao);
+
 }
